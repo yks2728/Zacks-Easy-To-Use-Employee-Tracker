@@ -18,7 +18,7 @@ const start = () => {
           "add a role",
           "add an employee",
           "update an employee role",
-          "quit"
+          "quit",
         ],
       },
     ])
@@ -46,7 +46,7 @@ const start = () => {
         case "update an employee role":
           updateAnEmployeeRole();
           break;
-        default: 
+        default:
           process.exit(1);
       }
     });
@@ -75,28 +75,149 @@ const viewAllEmployees = () => {
 };
 
 const addADepartment = () => {
-  db.query("INSERT INTO department", function (err, results) {
-    console.table(results);
-    start();
-  });
+  inquire
+    .prompt([
+      {
+        type: "input",
+        name: "department",
+        message: "Would you like to add a department?",
+      },
+    ])
+    .then((response) => {
+      db.query(
+        "INSERT INTO department (NAME) VALUES (?)",
+        response.department,
+        function (err, results) {
+          console.table(results);
+          start();
+          console.log(response);
+        }
+      );
+    });
 };
 
 const addARole = () => {
-  db.query("INSERT INTO role", function (err, results) {
-    console.table(results);
-    start();
-  });
+  inquire
+    .prompt([
+      {
+        type: "input",
+        name: "title",
+        message: "Add a title",
+      },
+      {
+        type: "input",
+        name: "salary",
+        message: "Add a salary",
+      },
+      {
+        type: "input",
+        name: "department_id",
+        message: "Add a Department Id",
+      },
+    ])
+    .then((response) => {
+      db.query(
+        "INSERT INTO role (title, salary, department_id) VALUES (?,?,?)",
+        [response.title, response.salary, response.department_id],
+        function (err, results) {
+          console.table(results);
+          start();
+          console.log(response);
+        }
+      );
+    });
 };
 
 const addAnEmployee = () => {
-  db.query("INSERT INTO employee", function (err, results) {
-    console.table(results);
-    start();
-  });
+  inquire
+    .prompt([
+      {
+        type: "input",
+        name: "first_name",
+        message: "First Name",
+      },
+      {
+        type: "input",
+        name: "last_name",
+        message: "Last Name",
+      },
+      {
+        type: "input",
+        name: "role_id",
+        message: "Role Id",
+      },
+      {
+        type: "input",
+        name: "manager_id",
+        message: "Manager Id",
+      },
+    ])
+    .then((response) => {
+      db.query(
+        "INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?,?,?,?)",
+        [
+          response.first_name,
+          response.last_name,
+          response.role_id,
+          response.manager_id,
+        ],
+        function (err, results) {
+          console.table(results);
+          start();
+        }
+      );
+    });
 };
 
-const updateAnEmployeeRole =() => {
-  db.query("UPDATE employee SET role_id = ?")
-}
-
-
+const updateAnEmployeeRole = () => {
+  db.promise()
+    .query("SELECT * FROM employee")
+    .then(([response]) => {
+      console.log(response);
+      let employees = response;
+      let choices = employees.map(({ id, first_name }) => {
+        return { name: first_name, value: id };
+      });
+      inquire
+        .prompt([
+          {
+            type: "list",
+            name: "employee_id",
+            message: "Select an Employee",
+            choices: choices,
+          },
+        ])
+        .then((response) => {
+          console.log(response);
+          const employee_id = response.employee_id;
+          db.promise()
+            .query("SELECT * FROM role")
+            .then(([res]) => {
+              console.log(res);
+              let role = res;
+              let choices = role.map(({ id, title }) => {
+                return { name: title, value: id };
+              });
+              inquire
+                .prompt([
+                  {
+                    type: "list",
+                    name: "role",
+                    message: "Select a role",
+                    choices: choices,
+                  },
+                ])
+                .then((response) => {
+                  db.query(
+                    "UPDATE employee SET role_id = ? WHERE id = ?",
+                    [response.role, employee_id],
+                    function (err, results) {
+                      console.table(results);
+                      start();
+                    }
+                  );
+                });
+            });
+        });
+    });
+};
