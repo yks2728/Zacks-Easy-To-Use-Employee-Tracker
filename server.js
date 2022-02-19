@@ -35,16 +35,16 @@ const start = () => {
           viewAllEmployees();
           break;
         case "add a department":
-          console.log("add a department");
+          addADepartment;
           break;
         case "add a role":
-          console.log("add a role");
+          addARole;
           break;
         case "add an employee":
-          console.log("add an employee");
+          addAnEmployee;
           break;
         case "update an employee role":
-          console.log("update an employee role");
+          updateAnEmployeeRole;
           break;
         default: 
           process.exit(1);
@@ -75,15 +75,24 @@ const viewAllEmployees = () => {
 };
 
 const addADepartment = () => {
-  db.query("INSERT INTO department")
+  db.query("INSERT INTO department", function (err, results) {
+    console.table(results);
+    start();
+  });
 };
 
 const addARole = () => {
-  db.query("INSERT INTO role")
+  db.query("INSERT INTO role", function (err, results) {
+    console.table(results);
+    start();
+  });
 };
 
 const addAnEmployee = () => {
-  db.query("INSERT INTO employee")
+  db.query("INSERT INTO employee", function (err, results) {
+    console.table(results);
+    start();
+  });
 };
 
 const updateAnEmployeeRole =() => {
