@@ -35,16 +35,16 @@ const start = () => {
           viewAllEmployees();
           break;
         case "add a department":
-          addADepartment;
+          addADepartment();
           break;
         case "add a role":
-          addARole;
+          addARole();
           break;
         case "add an employee":
-          addAnEmployee;
+          addAnEmployee();
           break;
         case "update an employee role":
-          updateAnEmployeeRole;
+          updateAnEmployeeRole();
           break;
         default: 
           process.exit(1);
