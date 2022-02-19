@@ -1,9 +1,25 @@
 {
+  "name": "zacks-easy-to-use-employee-tracker",
+  "version": "1.0.0",
+  "description": "## Use my Employee Tracker to keep a database on all your employees for your company",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yks2728/Zacks-Easy-To-Use-Employee-Tracker.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yks2728/Zacks-Easy-To-Use-Employee-Tracker/issues"
+  },
+  "homepage": "https://github.com/yks2728/Zacks-Easy-To-Use-Employee-Tracker#readme",
   "dependencies": {
-    "console.table": "^0.10.0",
-    "express": "^4.17.3",
     "inquirer": "^8.2.0",
-    "mysql2": "^2.3.3",
-    "node.js": "^0.0.1-security"
+    "mysql2": "^2.3.3"
   }
 }
